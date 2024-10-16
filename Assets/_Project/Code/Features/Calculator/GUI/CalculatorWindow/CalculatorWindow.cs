@@ -1,44 +1,43 @@
 ﻿#nullable enable
-using Calculator.ViewModels;
-using Nuclear.Services;
-using Nuclear.Services.GUI;
 using R3;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Calculator.Views
 {
-    [Path("GUI/CalculatorWindow/CalculatorWindow")]
-    public sealed class CalculatorWindow : MWindow<ICalculatorWindowViewModel>
+    public sealed class CalculatorWindow : MonoBehaviour, ICalculatorWindow
     {
         [SerializeField] private InputField _inputField = null!;
         [SerializeField] private RectTransform _historyContainer = null!;
         [SerializeField] private HistoryLineView _historyLinePrefab = null!;
         
-        public override void Init()
+        private readonly Subject<Unit> _onSubmit = new();
+        private readonly Subject<string> _onInputChanged = new();
+
+        private void Awake()
         {
-            base.Init();
-            _inputField.SetTextWithoutNotify(_viewModel.StartInputText);
-            _inputField.OnValueChangedAsObservable().Skip(1).Subscribe(_viewModel.HandleInputValueChanged).AddTo(gameObject);
-
-            foreach (var historyLineViewModel in _viewModel.StartHistoryLineViewModels)
-            {
-                CreateHistoryLine(historyLineViewModel);
-            }
-
-            _viewModel.OnAddHistoryLine.Subscribe(CreateHistoryLine).AddTo(gameObject);
-            _viewModel.OnResetInputLine.Subscribe(_ => _inputField.SetTextWithoutNotify("")).AddTo(gameObject);
+            _inputField.OnValueChangedAsObservable().Skip(1)
+                .Subscribe(_ => _onInputChanged.OnNext(_inputField.text)).AddTo(gameObject);
         }
 
-        private void CreateHistoryLine(IHistoryLineViewModel historyLineViewModel)
+        private void OnDestroy()
         {
-            var line = Instantiate(_historyLinePrefab, _historyContainer);
-            line.Init(historyLineViewModel);
+            _onSubmit.Dispose();
+            _onInputChanged.Dispose();
         }
 
-        public void OnSubmitButtonClick()
+        public void OnSubmitButtonClick() => _onSubmit.OnNext(Unit.Default);
+
+        public Observable<string> OnInputChanged => _onInputChanged;
+        public Observable<Unit> OnSubmit => _onSubmit;
+        public void SetInputText(string text)
         {
-            _viewModel.HandleSubmitButtonClick();
+            _inputField.SetTextWithoutNotify(text);
+        }
+
+        public HistoryLineView AddHistoryItem()
+        {
+            return Instantiate(_historyLinePrefab, _historyContainer);
         }
     }
 }

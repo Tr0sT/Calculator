@@ -16,13 +16,6 @@
       "dependencies": {},
       "hash": "a011c51ed65c9abc3151a7a408bc70d408352933"
     },
-    "com.nuclearband.windowsmanager": {
-      "version": "https://github.com/NuclearBand/NuclearWindowsManager.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "340b8c9d83fb759b099a8403c886a269d1c8413f"
-    },
     "com.unity.2d.animation": {
       "version": "9.1.0",
       "depth": 1,
@@ -241,13 +234,6 @@
         "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
-    },
-    "jp.hadashikick.vcontainer": {
-      "version": "https://github.com/hadashiA/VContainer.git?path=VContainer/Assets/VContainer#1.6.3",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "afaeff82040994f7836afa9f5116eb52a4e54f69"
     },
     "nuget.castle-core": {
       "version": "2.0.0",

@@ -1,12 +1,10 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using Calculator.Services;
 
 namespace Calculator.Features
 {
-    [UsedImplicitly]
     public sealed class SaveProvider : ISaveProvider
     {
         private readonly ISaveLoadService _saveLoadService;

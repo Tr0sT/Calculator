@@ -1,5 +1,4 @@
 #nullable enable
-using Calculator.ViewModels;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,9 +8,9 @@ namespace Calculator.Views
     {
         [SerializeField] private Text _text = null!;
 
-        public void Init(IHistoryLineViewModel viewModel)
+        public void Init(string text)
         {
-            _text.text = viewModel.Text;
+            _text.text = text;
         }
     }
 }

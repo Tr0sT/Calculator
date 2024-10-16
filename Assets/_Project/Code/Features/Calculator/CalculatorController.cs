@@ -1,13 +1,10 @@
 ﻿#nullable enable
 using System.Collections.ObjectModel;
-using JetBrains.Annotations;
-using Calculator.ViewModels;
-using Calculator.Views;
+using Calculator.Presenters;
 using Nuclear.Services;
 
 namespace Calculator.Features
 {
-    [UsedImplicitly]
     public sealed class CalculatorController : ICalculatorController
     {
         private readonly IWindowsService _windowsService;
@@ -34,7 +31,12 @@ namespace Calculator.Features
         public InputString CurrentInput => _calculatorModel.CurrentInput;
         public ReadOnlyCollection<HistoryItem> History => _calculatorModel.History;
 
-        public void OpenCalculatorWindow() => _windowsService.CreateWindow<CalculatorWindow, ICalculatorWindowViewModel>();
+        public void OpenCalculatorWindow()
+        {
+            var calculatorWindow = _windowsService.GetCalculatorWindow();
+            var presenter = new CalculatorWindowPresenter(_windowsService, this, calculatorWindow);
+        }
+
         public CalculationResult CalculateResultAndPopulateHistory(InputString value)
         {
             var result = CalculatorHelper.ParseAndCalculateResult(value);

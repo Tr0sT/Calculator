@@ -1,10 +1,8 @@
 #nullable enable
-using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Calculator.Services
 {
-    [UsedImplicitly]
     public sealed class SaveLoadService : ISaveLoadService
     {
         public T? LoadData<T>()

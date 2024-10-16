@@ -1,21 +1,24 @@
 ﻿#nullable enable
-using Calculator.ViewModels;
-using Nuclear.Services;
-using Nuclear.Services.GUI;
+using R3;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Calculator.Views
 {
-    [Path("GUI/MessageWindow/MessageWindow")]
-    public class MessageWindow : MWindow<IMessageWindowViewModel>
+    public class MessageWindow : MonoBehaviour, IMessageWindow
     {
         [SerializeField] private Text _messageText = null!;
-        
-        public override void Init()
+        private readonly Subject<Unit> _onClose = new();
+
+        public Observable<Unit> OnClose => _onClose;
+
+        void IMessageWindow.Init(string text)
         {
-            base.Init();
-            _messageText.text = _viewModel.Message;
+            gameObject.SetActive(true);
+            _messageText.text = text;
         }
+
+        void IMessageWindow.Close() => gameObject.SetActive(false);
+        public void OnOkClick() => _onClose.OnNext(Unit.Default);
     }
 }
